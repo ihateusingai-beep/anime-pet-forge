@@ -10,7 +10,7 @@
 
 | Pet | id | 圖集 | 大小 | Validator |
 |---|---|---|---|---|
-| ![奶黃貓貓](anime-cat-pet/atlas-preview.png) | `anime-cat-pet` | 73 格 | 2.52 MiB | `ok: true` · 0 warnings |
+| ![奶黃貓貓](anime-cat-pet/atlas-preview.png) | `anime-cat-pet` | 73 格 | 2.50 MiB | `ok: true` · 0 warnings |
 | ![零波短髮](eva-rei-pet/atlas-preview.png) | `eva-rei-pet` | 73 格 | 2.38 MiB | `ok: true` · 0 warnings |
 | ![零波長髮](eva-rei-long-pet/atlas-preview.png) | `eva-rei-long-pet` | 73 格 | 2.55 MiB | `ok: true` · 0 warnings |
 
