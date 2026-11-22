@@ -56,8 +56,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--char", required=True)
     ap.add_argument("--batch", required=True, help="batch number, as a key in char.json batches")
-    ap.add_argument("--ref-url", required=True, help="temporary url of the character reference image")
-    ap.add_argument("--out", required=True)
+    ap.add_argument("--ref-url", help="temporary url of the character reference image")
+    ap.add_argument("--ref-mime", default="image/jpeg",
+                    help="mime type of the reference image (default image/jpeg)")
+    ap.add_argument("--out", help="output request json path; omit with --print-prompt")
+    ap.add_argument("--print-prompt", action="store_true",
+                    help="print the prompts to stdout instead of writing a request "
+                         "file — for reviewing the text before you spend a generation")
     args = ap.parse_args()
 
     with open(args.char, encoding="utf-8") as f:
@@ -69,6 +74,17 @@ def main():
         sys.exit(f"unknown batch {key!r}; available: {sorted(batches)}")
     sheet_keys = batches[key]
 
+    if args.print_prompt:
+        for sk in sheet_keys:
+            sheet = cfg["sheets"][sk]
+            print(f"===== sheet-{sk}  ({sheet['aspect_ratio']}) =====")
+            print(build_prompt(cfg, sheet))
+            print()
+        return 0
+
+    if not args.ref_url or not args.out:
+        sys.exit("need --ref-url and --out (or use --print-prompt)")
+
     requests = []
     for sk in sheet_keys:
         sheet = cfg["sheets"][sk]
@@ -78,7 +94,7 @@ def main():
             "area": sheet.get("area", "4K"),
             "output_file": "sheet-" + sk,
             "n": 1,
-            "reference_images": [{"url": args.ref_url, "mime_type": "image/jpeg"}],
+            "reference_images": [{"url": args.ref_url, "mime_type": args.ref_mime}],
         })
 
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)

@@ -31,12 +31,29 @@ Work with the official `minimax-pet` skill alongside this one: it owns the
      │
      ├─(3) fetch_asset.sh + cutout.sh ──► transparent per-sheet PNGs
      │
-     └─(4) assemble_atlas.py ──► spritesheet.png (1536×2288) + pet.json
-                                              │
-                                     (5) official validator
-                                              │
-                                     (6) import through the MiniMax Pet app
+     ├─(4) assemble_atlas.py ──► spritesheet.png (1536×2288) + pet.json
+     │
+     ├─(5) check_atlas.py ──► layout / row-size / gaze-order check
+     │
+     ├─(6) validate.sh ──► official validator
+     │                     │
+     └─(7) import through the MiniMax Pet app
 ```
+
+`check_char.py` guards the front of the pipeline: a missing sheet or a
+mismatched frame count fails silently later, so check the config before you
+spend a generation call.
+
+### (0) Check the config
+
+```sh
+python3 scripts/check_char.py --char pets/my-pet/char.json
+```
+
+Catches a missing sheet, a frame count that disagrees with the panel list, two
+sheets claiming the same atlas row, a batch that forgets a sheet, and leftover
+template placeholders. Every one of those fails *silently* later — the sheet
+is simply never drawn, or it is drawn over something else.
 
 ### (1) Character reference
 
@@ -60,12 +77,27 @@ with a different character.
 url=$(mcode-tools upload_temp_url pets/my-pet/refs/reference.jpg \
       | python3 -c "import sys,json;print(json.load(sys.stdin)['temp_url'])")
 python3 scripts/make_batch_request.py --char pets/my-pet/char.json \
-        --batch 1 --ref-url "$url" --out req/batch1.json
+        --batch 1 --ref-url "$url" --ref-mime image/jpeg --out req/batch1.json
 mcode-tools connector call connector__matrix__generate_image --args-file req/batch1.json
 ```
 
 Repeat for every batch in `char.json` → `batches`. Each sheet is one
 multi-panel image; the model draws the whole sheet, not individual frames.
+
+To read the text before spending a generation:
+
+```sh
+python3 scripts/make_batch_request.py --char pets/my-pet/char.json \
+        --batch 1 --print-prompt
+```
+
+Write the verbatim record of every prompt as you go, and cross-check it
+against what was actually sent:
+
+```sh
+python3 scripts/make_prompts.py --char pets/my-pet/char.json \
+        --out pets/my-pet/prompts.json --verify req
+```
 
 ### (3) Download and cut out
 
@@ -100,16 +132,36 @@ It pastes the per-cell 192×208 PNGs straight into the grid. This reproduces
 the atlas **pixel for pixel** with no image generation at all, so a finished
 pet can be shipped with its `frames/` directory and rebuilt by anyone.
 
-### (5) Validate
+### (5) Check the atlas yourself
+
+```sh
+python3 scripts/check_atlas.py --char pets/my-pet/char.json \
+        --atlas pets/my-pet/spritesheet.png
+```
+
+The official validator only asks "is this cell non-empty". It cannot tell you
+that the wrong frame landed in the wrong cell, that a row was scaled down, or
+that the look directions are in the wrong order. This recomputes the expected
+cell map from `char.json` and checks the picture against it.
+
+The check that matters most: the assembler scales every row so its median
+frame lands on exactly `assembly.target_h`, then multiplies the row by its
+cap. So **a finished row's median height is `target_h × cap`** — a row
+measuring 149 px instead of 168 px was scaled to 0.89 to fit an over-wide
+frame, and the character is now visibly smaller in that animation. The
+official validator reports `ok: true` for that atlas.
+
+### (6) Validate
 
 ```sh
 bash scripts/validate.sh pets/my-pet
 ```
 
 Runs the official validator (resolved from the installed `minimax-pet` skill,
-never hardcoded). Exit 0 and `ok: true` is the bar.
+never hardcoded). Exit 0 and `ok: true` is the bar — but it is not the only
+bar. Run `check_atlas.py` too, and look at the picture.
 
-### (6) Import
+### (7) Import
 
 Import `pet.json` **and** `spritesheet.png` through the app's own import
 panel. Never write the Host data directory, never call a private endpoint,
@@ -164,7 +216,11 @@ Read `references/pitfalls.md` before your first generation run. The short list:
    credentials in a file.
 6. **The validator does not judge art.** It checks metadata, pixels, layout
    and non-empty cells. It cannot tell you the character is inconsistent or
-   that the gaze directions are wrong. Look at the atlas yourself.
+   that the gaze directions are wrong — and it reports `ok: true` for an atlas
+   whose run row was scaled down to 0.89.
+
+   `scripts/check_atlas.py` catches the scaled row for you, but only a human
+   catches the character drift. Look at the atlas yourself.
 
 ---
 

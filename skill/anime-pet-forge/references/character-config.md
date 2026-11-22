@@ -31,7 +31,7 @@ like* and *how the atlas is built*, so the whole thing can be reproduced.
                   "failed", "waiting", "work", "review", "gaze"],
   "sheets": {
     "idle": {
-      "aspect_ratio": "3:2",     // must match the panel grid shape
+      "aspect_ratio": "3:2",     // the generation canvas shape (see below)
       "cols": 3,
       "rows": 2,
       "frames": 6,               // panels actually used
@@ -103,3 +103,61 @@ The generator responds to that whitespace, and the recorded prompts in
 sent, plus the reference prompt. It is not read by the scripts; it is the
 audit trail and the copy-paste source when you need to regenerate exactly one
 sheet without touching the rest.
+
+---
+
+## `aspect_ratio` is the generation canvas, not the panel grid
+
+`aspect_ratio` is the shape of the **image the model produces**. It does not
+have to equal `cols:rows` — it should be close to it, because a sheet far
+from its intended shape gets its panels laid out unevenly.
+
+The aspect that works for each grid in the template:
+
+| Grid | Panels | `aspect_ratio` | Why |
+|---|---|---|---|
+| 3 × 2 | 6 | `3:2` | exact |
+| 4 × 2 | 8 | `2:1` | exact |
+| 2 × 2 | 4 | `1:1` | exact |
+| 5 × 1 | 5 | `3:1` | wider than 5:1 so the model has room to draw five separate poses without squashing them into one blob |
+| 4 × 4 | 16 | `1:1` | exact |
+
+Deviating from these makes the panel splitter work harder and the result less
+consistent — not invalid, but not worth it.
+
+---
+
+## Write the reference prompt from a structured brief
+
+The reference prompt is the only thing locking the character identity, and it
+is usually the hardest prompt to write because "describe your character" has
+too many degrees of freedom. Write the brief down first, then translate it
+into prose. A brief that works:
+
+```jsonc
+{
+  "species": "chick (baby chicken)",
+  "silhouette": "single round ball-shaped body, no separate head, no neck, almost as wide as it is tall",
+  "proportion_target": "about 1 head tall; the round body IS the character",
+  "must_have": [
+    "one single round ball body",
+    "three small fluffy head feathers on top",
+    "two tiny wings folded flat against the sides",
+    "two tiny orange three-toed feet"
+  ],
+  "must_avoid": [
+    "no separate head, no neck",
+    "no long hair, no ribbons, no glasses, no hat",
+    "no spread-out wings in the standing sheets"
+  ],
+  "palette": { "plumage_main": "#FFD34E", "beak_and_feet": "#F58220" }
+}
+```
+
+Two things earn their place here:
+
+* **`must_avoid`** — the model happily adds a hat, a ribbon or a second head.
+  Listing what must *not* appear is worth as much as listing what must.
+* **`silhouette`** — a side-view running pose is the one that breaks the
+  cell. Deciding the silhouette in the brief, before any pose sheet exists,
+  is what keeps the run row from being scaled down (see `pitfalls.md` #1).

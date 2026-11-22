@@ -65,8 +65,17 @@
 
     "run-left": {
       "aspect_ratio": "2:1", "cols": 4, "rows": 2, "frames": 8,
-      "panels": ["_copy run-right and say LEFT instead of RIGHT_"],
-      "note": "_copy run-right's note and say LEFT instead of RIGHT_",
+      "panels": [
+        "Panel 1: side view running toward the LEFT edge of the panel, torso upright and leaning slightly forward, one knee lifted high, the opposite leg stretched back, arms pumping.",
+        "Panel 2: side view running toward the LEFT edge, body at its lowest, legs tucked under, arms swung back.",
+        "Panel 3: side view running toward the LEFT edge, one leg passing under the body, the other foot pushing off the ground.",
+        "Panel 4: side view running toward the LEFT edge, body lifted clear off the ground, both feet in the air, knees tucked.",
+        "Panel 5: side view running toward the LEFT edge, opposite legs from panel 1: one knee lifted high, the opposite leg stretched back.",
+        "Panel 6: side view running toward the LEFT edge, body at its lowest, opposite legs.",
+        "Panel 7: side view running toward the LEFT edge, one leg passing under the body.",
+        "Panel 8: side view running toward the LEFT edge, body lifted clear off the ground, both feet in the air."
+      ],
+      "note": "While running: she leans slightly forward, her hair streams backward, her eyes look forward in the direction of travel, and her arms swing. The whole figure stays upright and narrow: the total width of the character is only slightly wider than she is tall, never stretched out. The eight panels must read as one smooth looping run cycle.",
       "sheet_file": "sheet-run-left-cut.png",
       "clamp_low": 0.90, "clamp_high": 1.10, "fixed_scale": false,
       "atlas": { "row": 2 }

@@ -76,9 +76,12 @@ down / left yourself.
 * The **image** budget is 8 MiB. The **HTTP request** limit is 12 MiB for the
   whole UTF-8 JSON, because base64 expands the image by ~4/3:
   `ceil(imageBytes / 3) * 4 + 4096 <= 12 * 1024 * 1024`.
-* The official validator checks metadata, PNG decoding, dimensions, non-empty
-  cells and transparent backgrounds. Edge contact, motionless tracks and
-  repeated gaze cells produce **warnings**.
+* The official validator checks metadata, **PNG** decoding, dimensions,
+  non-empty cells and transparent backgrounds. Edge contact, motionless tracks
+  and repeated gaze cells produce **warnings**. It does **not** decode WebP —
+  the runtime can import static WebP, but `validate-art.mjs` only proves
+  things about the PNG profile. If you ship a WebP, the validator's "ok" says
+  nothing about it.
 * It reads no Host state, changes no import state, cannot see whether an id
   already exists, and cannot understand the character or the action meaning.
 

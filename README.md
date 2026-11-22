@@ -26,12 +26,15 @@
 skill/anime-pet-forge/
   SKILL.md              # 工作流程
   scripts/
+    check_char.py       # (0) char.json schema 檢查（生成前先跑）
     make_ref_request.py # (1) 角色設定圖 request
     make_batch_request.py# (2) 姿勢 sheet request（支援 per-sheet 變體）
+    make_prompts.py     # (2b) 寫 prompts.json（逐字紀錄 + 對表核對）
     fetch_asset.sh      # (3) 由 node_id 落載生成結果
     cutout.sh           # (3) 去背 → 真 alpha PNG
     assemble_atlas.py   # (4) 切格 + 歸一化 + 貼入 1536×2288 圖集
-    validate.sh         # (5) 行官方 validator
+    check_atlas.py      # (5) 版面 / 縮放 / 視線次序檢查
+    validate.sh         # (6) 行官方 validator
   references/
     atlas-spec.md       # v2 規格重點
     character-config.md # char.json 完整 schema
@@ -44,8 +47,9 @@ skill/anime-pet-forge/
 ### 快速開始
 
 ```sh
-# 0) 複製模板
+# 0) 複製模板 + 檢查 schema
 cp skill/anime-pet-forge/templates/char.example.json my-pet/char.json
+python3 skill/anime-pet-forge/scripts/check_char.py --char my-pet/char.json
 
 # 1) 角色設定圖（text-only 設計稿）
 python3 skill/anime-pet-forge/scripts/make_ref_request.py \
@@ -67,7 +71,11 @@ bash skill/anime-pet-forge/scripts/cutout.sh sheets/sheet-idle.jpg sheets/sheet-
 python3 skill/anime-pet-forge/scripts/assemble_atlas.py \
         --char my-pet/char.json --from-sheets sheets --out my-pet --dump my-pet/frames
 
-# 5) 驗證
+# 5) 檢查版面（官方 validator 捉唔到縮細嘅行）
+python3 skill/anime-pet-forge/scripts/check_atlas.py \
+        --char my-pet/char.json --atlas my-pet/spritesheet.png
+
+# 6) 官方驗證
 bash skill/anime-pet-forge/scripts/validate.sh my-pet
 ```
 
