@@ -1,0 +1,20 @@
+# Working directories.
+#
+# _work/ holds the 4K source sheets and the generation request files.
+# The request files embed a signed temporary OSS URL (credential id +
+# signature), so they must never reach git.
+_work/
+
+# Local scratch
+req/
+sheets/
+
+# OS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# Node
+node_modules/

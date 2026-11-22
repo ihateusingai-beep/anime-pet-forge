@@ -1,0 +1,294 @@
+{
+  "id": "eva-rei-long-pet",
+  "displayName": "零波 Rei 長髮版",
+  "description": "官方長髮造型嘅 chibi 零波：及腰長直藍髮、三角呆毛、紅色髮夾、紅眼，著住白色插入栓服配橙色滾邊。會呼吸眨眼、左右跑步、揮手、跳、失望流淚、耐心等待、專心做嘢，同埋 16 個方向嘅視線。",
+  "spriteVersionNumber": 2,
+  "reference": {
+    "prompt": "An original chibi anime mascot character design, full body, front view, centered on the canvas, standing upright on both feet with both arms relaxed at her sides, calm neutral expression, looking straight at the viewer.\n\nCharacter design:\n- Chibi anime mascot style, about two heads tall with an oversized round head and a tiny slim body.\n- Long straight steel-blue hair falling well past her shoulders down to her lower back, smooth and slightly glossy, a few soft cel-shaded strands, tapered ends.\n- The signature single triangular ahoge: one sharp cowlick spike rising from the top of her head, angled to one side.\n- A small angular red hairclip on the left side of her bangs.\n- Two long side locks framing her face, cut straight at the ends.\n- Big red eyes with white highlights, tiny nose, small neutral mouth, faint blush.\n- A white form-fitting EV-style plugsuit: high black-trimmed collar, orange accent trim at the hip and the thighs, a few black strap details, pale purple-navy panel accents on the sides, dark grey boots. Clean and modest, the suit reads as a sci-fi pilot suit.\n- Warm dark-brown outline, flat cel-shaded pastel anime-mascot art style, clean flat vector look, crisp outlines, smooth cel shading.\n- No readable logos, no lettering, no text anywhere.\n\nBackground: plain seamless pure white background, even soft studio lighting, no ground shadow, no floor, no props, no text, no watermark, no border.",
+    "aspect_ratio": "3:4",
+    "area": "4K",
+    "output_file": "rei-long-reference"
+  },
+  "prompts": {
+    "character": "Picture 1 is the exact character to reproduce in every panel: same chibi proportions (about two heads tall, oversized round head, tiny slim body), same LONG straight steel-blue hair falling past the shoulders down to the lower back with tapered ends, same signature single triangular ahoge cowlick spike standing on top of her head, same small angular red hairclip on the side of her bangs, same two long side locks framing the face, same big red eyes with white highlights, same faint blush, same white EV plugsuit with the high black-trimmed collar, orange accent trim at the hip and thighs, black strap details, pale purple-navy side panels and dark grey boots, same warm dark-brown outline, same flat cel-shaded pastel anime-mascot art style, same size in every panel.",
+    "ground": "In every panel the character stands on the same horizontal ground line near the bottom of its own panel, fully visible with clear white margin around it, identical camera angle and identical lighting.",
+    "background": "Background: plain seamless pure white in every panel. No grid lines, no borders, no frames, no text, no labels, no numbers, no watermark, no ground shadow, no floor, no props, no extra characters.",
+    "global_note": "Her long hair hangs in a compact curtain close to her body in every pose, never fanning out to the sides."
+  },
+  "sheet_order": [
+    "idle",
+    "run-right",
+    "run-left",
+    "wave",
+    "jump",
+    "failed",
+    "waiting",
+    "work",
+    "review",
+    "gaze"
+  ],
+  "sheets": {
+    "idle": {
+      "aspect_ratio": "3:2",
+      "cols": 3,
+      "rows": 2,
+      "frames": 6,
+      "panels": [
+        "Panel 1: front view standing, arms relaxed at her sides, red eyes wide open, small neutral mouth.",
+        "Panel 2: front view standing, body lifted slightly as if breathing in, red eyes wide open.",
+        "Panel 3: front view standing, body back at normal height, eyes half closed mid-blink.",
+        "Panel 4: front view standing, body lowered slightly as if breathing out, eyes fully closed.",
+        "Panel 5: front view standing, body back at normal height, red eyes wide open again.",
+        "Panel 6: front view standing, happy open-mouth smile, red eyes wide and sparkling."
+      ],
+      "sheet_file": "sheet-idle-cut.png",
+      "clamp_low": 0.9,
+      "clamp_high": 1.1,
+      "fixed_scale": false,
+      "note": "",
+      "atlas": {
+        "row": 0
+      }
+    },
+    "run-right": {
+      "aspect_ratio": "2:1",
+      "cols": 4,
+      "rows": 2,
+      "frames": 8,
+      "panels": [
+        "Panel 1: side view of the girl running toward the RIGHT edge of the panel, torso upright and leaning slightly forward, one knee lifted high, the opposite leg stretched back, arms pumping.",
+        "Panel 2: side view running toward the RIGHT edge, body at its lowest, legs tucked under, arms swung back.",
+        "Panel 3: side view running toward the RIGHT edge, one leg passing under the body, the other foot pushing off the ground.",
+        "Panel 4: side view running toward the RIGHT edge, body lifted clear off the ground, both feet in the air, knees tucked.",
+        "Panel 5: side view running toward the RIGHT edge, opposite legs from panel 1: one knee lifted high, the opposite leg stretched back.",
+        "Panel 6: side view running toward the RIGHT edge, body at its lowest, opposite legs.",
+        "Panel 7: side view running toward the RIGHT edge, one leg passing under the body.",
+        "Panel 8: side view running toward the RIGHT edge, body lifted clear off the ground, both feet in the air."
+      ],
+      "sheet_file": "sheet-run-right-cut.png",
+      "clamp_low": 0.9,
+      "clamp_high": 1.1,
+      "fixed_scale": false,
+      "note": "While running: she leans slightly forward, her blue bob hair and side locks stream backward, her eyes look forward in the direction of travel, and her arms swing. Her long hair hangs in a compact curtain close to her back and shoulders, never fanning out wide. The whole figure stays upright and narrow: the total width of the character is only slightly wider than she ",
+      "atlas": {
+        "row": 1
+      }
+    },
+    "run-left": {
+      "aspect_ratio": "2:1",
+      "cols": 4,
+      "rows": 2,
+      "frames": 8,
+      "panels": [
+        "Panel 1: side view of the girl running toward the LEFT edge of the panel, torso upright and leaning slightly forward, one knee lifted high, the opposite leg stretched back, arms pumping.",
+        "Panel 2: side view running toward the LEFT edge, body at its lowest, legs tucked under, arms swung back.",
+        "Panel 3: side view running toward the LEFT edge, one leg passing under the body, the other foot pushing off the ground.",
+        "Panel 4: side view running toward the LEFT edge, body lifted clear off the ground, both feet in the air, knees tucked.",
+        "Panel 5: side view running toward the LEFT edge, opposite legs from panel 1: one knee lifted high, the opposite leg stretched back.",
+        "Panel 6: side view running toward the LEFT edge, body at its lowest, opposite legs.",
+        "Panel 7: side view running toward the LEFT edge, one leg passing under the body.",
+        "Panel 8: side view running toward the LEFT edge, body lifted clear off the ground, both feet in the air."
+      ],
+      "sheet_file": "sheet-run-left-cut.png",
+      "clamp_low": 0.9,
+      "clamp_high": 1.1,
+      "fixed_scale": false,
+      "note": "While running: she leans slightly forward, her blue bob hair and side locks stream backward, her eyes look forward in the direction of travel, and her arms swing. Her long hair hangs in a compact curtain close to her back and shoulders, never fanning out wide. The whole figure stays upright and narrow: the total width of the character is only slightly wider than she ",
+      "atlas": {
+        "row": 2
+      }
+    },
+    "wave": {
+      "aspect_ratio": "1:1",
+      "cols": 2,
+      "rows": 2,
+      "frames": 4,
+      "panels": [
+        "Panel 1: front view standing, her right arm just lifting off her side, small neutral smile, eyes open.",
+        "Panel 2: front view standing, her right arm raised to shoulder height, friendly smile, eyes open, left arm still down at her side.",
+        "Panel 3: front view standing, her right arm at full height above her head, eyes squeezed shut happily, big blush.",
+        "Panel 4: front view standing, her right arm lowered back to shoulder height, eyes open again, friendly smile."
+      ],
+      "sheet_file": "sheet-wave-cut.png",
+      "clamp_low": 0.9,
+      "clamp_high": 1.1,
+      "fixed_scale": false,
+      "note": "",
+      "atlas": {
+        "row": 3
+      }
+    },
+    "jump": {
+      "aspect_ratio": "3:1",
+      "cols": 5,
+      "rows": 1,
+      "frames": 5,
+      "panels": [
+        "Panel 1: she crouches down low, knees bent, body squashed, hair falling forward, focused red shoulders, focused red eyes. She touches the bottom of her panel.",
+        "Panel 2: she launches upward, body stretched tall, both arms reaching up, hair flying up, eyes wide. She is drawn floating above the bottom of her panel.",
+        "Panel 3: she is at the highest point of the jump, fully airborne, legs tucked up, arms up. She is drawn floating highest in her panel.",
+        "Panel 4: she falls down, body stretched, arms reaching forward and down, hair flying up. She is drawn floating above the bottom of her panel.",
+        "Panel 5: she lands and squashes low on the ground, feet forward, hair settling. She touches the bottom of her panel."
+      ],
+      "sheet_file": "sheet-jump-cut.png",
+      "clamp_low": 0.7,
+      "clamp_high": 1.05,
+      "fixed_scale": true,
+      "note": "She keeps exactly the same body size in all five panels; only her pose and her height inside the panel change. Panel 1 and panel 5 are on the ground line, panels 2 to 4 are in the air at different heights, panel 3 being the highest.",
+      "atlas": {
+        "row": 4
+      }
+    },
+    "failed": {
+      "aspect_ratio": "2:1",
+      "cols": 4,
+      "rows": 2,
+      "frames": 8,
+      "panels": [
+        "Panel 1: front view standing, red eyes wide open in shock, small round open mouth.",
+        "Panel 2: front view standing, head tilted slightly, small wavy sad mouth, eyes wide.",
+        "Panel 3: front view standing but slumping, shoulders drooping, head lowered, wavy sad mouth.",
+        "Panel 4: she sits down on the ground, knees together, hands on the floor, sad wavy mouth.",
+        "Panel 5: she is sitting, head lowered, eyes half closed, small wavy mouth.",
+        "Panel 6: she is sitting, head lowered further, eyes closed, small wavy mouth.",
+        "Panel 7: she is sitting, head lifted a little, one big teardrop welling up in one red eye, very sad.",
+        "Panel 8: she is sitting, head lowered again, a single teardrop falling from one eye, very sad."
+      ],
+      "sheet_file": "sheet-failed-cut.png",
+      "clamp_low": 0.75,
+      "clamp_high": 1.1,
+      "fixed_scale": false,
+      "note": "",
+      "atlas": {
+        "row": 5
+      }
+    },
+    "waiting": {
+      "aspect_ratio": "3:2",
+      "cols": 3,
+      "rows": 2,
+      "frames": 6,
+      "panels": [
+        "Panel 1: front view standing, looking up at the viewer expectantly, chin slightly raised.",
+        "Panel 2: front view standing, body leaning slightly to the left, hair shifting, patient expression.",
+        "Panel 3: front view standing, head tilted to one side, expectant look.",
+        "Panel 4: front view standing, eyes half lidded and patient, arms relaxed.",
+        "Panel 5: front view standing, both hands slightly raised as if ready, hopeful expression.",
+        "Panel 6: front view standing, body slightly lifted in a small hopeful hop, hair bouncing, wide hopeful smile."
+      ],
+      "sheet_file": "sheet-waiting-cut.png",
+      "clamp_low": 0.9,
+      "clamp_high": 1.1,
+      "fixed_scale": false,
+      "note": "",
+      "atlas": {
+        "row": 6
+      }
+    },
+    "work": {
+      "aspect_ratio": "3:2",
+      "cols": 3,
+      "rows": 2,
+      "frames": 6,
+      "panels": [
+        "Panel 1: front view standing and leaning slightly forward, both hands down, focused red eyes, concentrating.",
+        "Panel 2: same stance, her right hand raised forward as if busy typing or swiping, focused eyes.",
+        "Panel 3: same stance, both hands down, a tiny effort puff beside one cheek, focused eyes.",
+        "Panel 4: same stance, her left hand raised forward as if busy typing or swiping, focused eyes.",
+        "Panel 5: same stance, both hands raised together, determined focused eyes.",
+        "Panel 6: same stance, both hands down, small satisfied smile, standing straight."
+      ],
+      "sheet_file": "sheet-work-cut.png",
+      "clamp_low": 0.9,
+      "clamp_high": 1.1,
+      "fixed_scale": false,
+      "note": "She works in place facing the viewer, body leaning forward with busy hands. It is NOT running sideways and she never leaves her spot.",
+      "atlas": {
+        "row": 7
+      }
+    },
+    "review": {
+      "aspect_ratio": "3:2",
+      "cols": 3,
+      "rows": 2,
+      "frames": 6,
+      "panels": [
+        "Panel 1: front view standing, both hands down at her sides, calm attentive face.",
+        "Panel 2: front view standing, one hand extended to the side presenting something, attentive smile.",
+        "Panel 3: front view standing, both hands extended outward presenting something, big smile.",
+        "Panel 4: front view standing, leaning forward toward the viewer with both hands spread wide, eyes sparkling with star highlights.",
+        "Panel 5: front view standing proudly, chest out, eyes closed in a confident happy smile, one hand resting on her chest.",
+        "Panel 6: front view standing, big proud open smile, red eyes wide and sparkling, one hand raised in a small wave, blush."
+      ],
+      "sheet_file": "sheet-review-cut.png",
+      "clamp_low": 0.9,
+      "clamp_high": 1.1,
+      "fixed_scale": false,
+      "note": "",
+      "atlas": {
+        "row": 8
+      }
+    },
+    "gaze": {
+      "aspect_ratio": "1:1",
+      "cols": 4,
+      "rows": 4,
+      "frames": 16,
+      "panels": [
+        "Panel 1: head tilted straight UP, chin raised, red pupils pointing up.",
+        "Panel 2: head turned UP and slightly to the RIGHT, pupils up-right.",
+        "Panel 3: head turned UP-RIGHT at 45 degrees, pupils up-right.",
+        "Panel 4: head turned RIGHT and slightly UP, pupils right-up.",
+        "Panel 5: head turned straight RIGHT, red pupils pointing right.",
+        "Panel 6: head turned RIGHT and slightly DOWN, pupils right-down.",
+        "Panel 7: head turned DOWN-RIGHT at 45 degrees, pupils down-right.",
+        "Panel 8: head turned DOWN and slightly to the RIGHT, pupils down-right.",
+        "Panel 9: head tilted straight DOWN, chin tucked, pupils pointing down.",
+        "Panel 10: head turned DOWN and slightly to the LEFT, pupils down-left.",
+        "Panel 11: head turned DOWN-LEFT at 45 degrees, pupils down-left.",
+        "Panel 12: head turned LEFT and slightly DOWN, pupils left-down.",
+        "Panel 13: head turned straight LEFT, pupils pointing left.",
+        "Panel 14: head turned LEFT and slightly UP, pupils left-up.",
+        "Panel 15: head turned UP-LEFT at 45 degrees, pupils up-left.",
+        "Panel 16: head turned UP and slightly to the LEFT, pupils up-left."
+      ],
+      "sheet_file": "sheet-gaze-cut.png",
+      "clamp_low": 0.9,
+      "clamp_high": 1.1,
+      "fixed_scale": false,
+      "note": "In all sixteen panels the character's whole body is in exactly the same position: standing front view, both arms down at her sides, both feet planted, identical body size and identical body shape. ONLY the head and the eyes change direction from panel to panel, turning on the neck. The body is a copy of the body in panel 1 in every panel.",
+      "atlas": {
+        "rows": [
+          9,
+          10
+        ],
+        "columns_per_row": 8
+      }
+    }
+  },
+  "batches": {
+    "1": [
+      "idle",
+      "run-right",
+      "run-left"
+    ],
+    "2": [
+      "wave",
+      "jump",
+      "failed"
+    ],
+    "3": [
+      "waiting",
+      "work",
+      "review"
+    ],
+    "4": [
+      "gaze"
+    ]
+  },
+  "assembly": {
+    "target_h": 168,
+    "baseline": 196,
+    "margin": 4
+  }
+}

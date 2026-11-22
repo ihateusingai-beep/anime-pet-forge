@@ -1,0 +1,7 @@
+{
+  "id": "my-mint-pet",
+  "displayName": "My Mint Pet",
+  "description": "An original chibi mascot companion.",
+  "spritesheetPath": "spritesheet.png",
+  "spriteVersionNumber": 2
+}

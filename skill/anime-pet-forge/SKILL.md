@@ -1,0 +1,185 @@
+---
+name: anime-pet-forge
+description: Forge original anime-style desktop pets for MiniMax Pet v2 — a 1536x2288 RGBA spritesheet (8x11 grid of 192x208 cells, 9 animation tracks + 16 look directions) plus pet.json. Use when creating a new chibi/anime pet, porting a character into the MiniMax Pet app, rebuilding a pet atlas from per-cell frames, or fixing a pet whose cells are clipped, mis-scaled or mis-aligned.
+---
+
+# Anime Pet Forge
+
+Turn a character concept into a validated, importable MiniMax Pet.
+
+The hard part of this job is **not** drawing — it is making 73 independently
+generated frames look like one character, at one size, on one baseline, inside
+a fixed grid. This skill exists to make that mechanical instead of artisanal.
+
+Work with the official `minimax-pet` skill alongside this one: it owns the
+**atlas specification** and the **validator**. This skill owns the
+**production pipeline** — reference sheet, pose sheets, cut-out, assembly.
+
+---
+
+## The pipeline
+
+```text
+  char.json
+     │
+     ├─(1) make_ref_request.py ──► generate ──► character reference image
+     │                                        (single source of truth for identity)
+     │
+     ├─(2) make_batch_request.py ──► generate ──► 10 pose sheets
+     │                                        (idle/run×2/wave/jump/failed/
+     │                                         waiting/work/review/gaze)
+     │
+     ├─(3) fetch_asset.sh + cutout.sh ──► transparent per-sheet PNGs
+     │
+     └─(4) assemble_atlas.py ──► spritesheet.png (1536×2288) + pet.json
+                                              │
+                                     (5) official validator
+                                              │
+                                     (6) import through the MiniMax Pet app
+```
+
+### (1) Character reference
+
+```sh
+python3 scripts/make_ref_request.py --char pets/my-pet/char.json --out req/ref.json
+mcode-tools connector call connector__matrix__generate_image --args-file req/ref.json
+```
+
+The reference image is a **text-only design sheet** (unless the user supplies a
+reference image themselves). It must fully describe the character — the model
+has nothing else to go on. Lock: chibi proportions, hair silhouette, eye
+colour and shape, outfit with every colour accent, outline colour, art style.
+
+### (2) Pose sheets
+
+The reference image is uploaded to a **temporary signed URL** (usually ~1 hour).
+Re-upload it before **every** batch — an expired URL silently yields a sheet
+with a different character.
+
+```sh
+url=$(mcode-tools upload_temp_url pets/my-pet/refs/reference.jpg \
+      | python3 -c "import sys,json;print(json.load(sys.stdin)['temp_url'])")
+python3 scripts/make_batch_request.py --char pets/my-pet/char.json \
+        --batch 1 --ref-url "$url" --out req/batch1.json
+mcode-tools connector call connector__matrix__generate_image --args-file req/batch1.json
+```
+
+Repeat for every batch in `char.json` → `batches`. Each sheet is one
+multi-panel image; the model draws the whole sheet, not individual frames.
+
+### (3) Download and cut out
+
+The generator paints on flat white; it cannot be trusted to emit real alpha.
+Cut every sheet out afterwards:
+
+```sh
+bash scripts/fetch_asset.sh <node_id> sheets/sheet-idle.jpg
+bash scripts/cutout.sh sheets/sheet-idle.jpg sheets/sheet-idle-cut.png
+```
+
+### (4) Assemble
+
+```sh
+python3 scripts/assemble_atlas.py --char pets/my-pet/char.json \
+        --from-sheets sheets --out pets/my-pet --dump pets/my-pet/frames
+```
+
+`--from-sheets` is the generation path: it slices the 4K sheets back into
+panels, normalises apparent size against the row median, aligns every frame
+to a shared foot baseline, and scales the whole row down if any frame would
+otherwise touch the cell edge.
+
+`--from-frames` is the reproducible path:
+
+```sh
+python3 scripts/assemble_atlas.py --char pets/my-pet/char.json \
+        --from-frames pets/my-pet/frames --out pets/my-pet
+```
+
+It pastes the per-cell 192×208 PNGs straight into the grid. This reproduces
+the atlas **pixel for pixel** with no image generation at all, so a finished
+pet can be shipped with its `frames/` directory and rebuilt by anyone.
+
+### (5) Validate
+
+```sh
+bash scripts/validate.sh pets/my-pet
+```
+
+Runs the official validator (resolved from the installed `minimax-pet` skill,
+never hardcoded). Exit 0 and `ok: true` is the bar.
+
+### (6) Import
+
+Import `pet.json` **and** `spritesheet.png` through the app's own import
+panel. Never write the Host data directory, never call a private endpoint,
+never patch the installed package. Use a **new pet id** unless the user
+explicitly confirms replacing an existing one.
+
+---
+
+## Configuration: `char.json`
+
+One file per pet, describing everything the pipeline needs.
+
+| Field | Meaning |
+|---|---|
+| `id`, `displayName`, `description` | written into `pet.json` |
+| `reference` | the text-only character design prompt + aspect ratio |
+| `prompts.character` | the "Picture 1 is the exact character to reproduce…" block reused in every sheet |
+| `prompts.ground` | the "stands on the same horizontal ground line" block |
+| `prompts.background` | the pure-white-background block |
+| `prompts.global_note` | optional extra constraint appended to every sheet (e.g. a hair silhouette rule) |
+| `sheets.<key>` | `aspect_ratio`, `cols`, `rows`, `frames`, `panels[]`, `note`, and the assembly tuning (`clamp_low`, `clamp_high`, `fixed_scale`, `atlas`) |
+| `batches` | which sheets go into which generation call |
+| `assembly` | `target_h`, `baseline`, `margin` |
+
+A sheet may override `grid_header`, `character_prompt`, `ground_prompt` or
+`background_prompt` when it was written with different wording than the rest
+of the pet. Omit the `note` key entirely when a sheet has no note block; keep
+it as `""` when it had an empty one — those are different prompts.
+
+See `references/character-config.md` for the full schema and
+`templates/char.example.json` for a starting point.
+
+---
+
+## Things that will bite you
+
+Read `references/pitfalls.md` before your first generation run. The short list:
+
+1. **A character that overflows its cell is silently scaled down.** A cat with
+   a streaming tail ends up 1.4× wider than tall, so the assembler shrinks the
+   whole row to fit and the pet suddenly looks smaller than in every other
+   row. Constrain the silhouette in the prompt and regenerate.
+2. **Long hair must be told to hang, not fan.** "Long straight hair" alone
+   makes the model spread it sideways.
+3. **Sheet panels are not evenly sized.** The assembler finds the real panel
+   boundaries from the alpha mask and falls back to an even split — but a
+   sheet with a stray full-width line (a faint horizon) breaks the column
+   detection. Generate on pure white with no horizon.
+4. **The reference URL expires.** See (2).
+5. **Never commit `req/*.json`.** They embed signed OSS URLs with a
+   credential and a signature. They are short-lived, but they are still
+   credentials in a file.
+6. **The validator does not judge art.** It checks metadata, pixels, layout
+   and non-empty cells. It cannot tell you the character is inconsistent or
+   that the gaze directions are wrong. Look at the atlas yourself.
+
+---
+
+## Layout of a finished pet
+
+```text
+pets/my-pet/
+  pet.json          # metadata for the app
+  spritesheet.png   # 1536×2288, 8-bit RGBA, non-interlaced, ≤ 8 MiB
+  atlas-preview.png # human-readable contact sheet
+  char.json         # the production config
+  prompts.json      # the verbatim prompt of every sheet, as generated
+  frames/           # 73 per-cell 192×208 PNGs (rebuilds the atlas exactly)
+  refs/             # the character reference image
+```
+
+`sheets/` (the 4K sources) and `req/` (the signed-URL request files) are
+working directories. They are large and/or secret — keep them out of git.
