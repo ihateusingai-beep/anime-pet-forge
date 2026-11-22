@@ -168,6 +168,23 @@ Read `references/pitfalls.md` before your first generation run. The short list:
 
 ---
 
+## Windows (win32) platform notes
+
+The Python scripts (`make_ref_request.py`, `make_batch_request.py`,
+`assemble_atlas.py`) are cross-platform as long as Python 3 with Pillow is
+installed — `python3` may be `python` on Windows.
+
+The three `.sh` helpers (`fetch_asset.sh`, `cutout.sh`, `validate.sh`) need
+bash. On Windows, either run them under Git Bash / WSL, or port the three
+one-liners to PowerShell — each is only a `mcode-tools` call piped through
+`python3 -c` plus a `curl`/`Invoke-WebRequest` download. Nothing else in the
+pipeline is platform-specific.
+
+`mcode-tools` itself ships with MiniMax Code and is expected on `PATH` for
+every platform.
+
+---
+
 ## Layout of a finished pet
 
 ```text
